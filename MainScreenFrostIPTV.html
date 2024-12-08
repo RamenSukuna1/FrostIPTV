@@ -20,7 +20,7 @@
 
         body {
             font-family: Arial, sans-serif;
-            background-color: #1e3c72;
+            background: linear-gradient(to bottom, #e0f7fa, #80deea);
             color: white;
             display: flex;
             justify-content: center;
@@ -34,20 +34,6 @@
             bottom: 0;
         }
 
-        /* Orientation Lock Styles */
-        @media screen and (max-aspect-ratio: 16/9) {
-            body {
-                transform: rotate(-90deg);
-                transform-origin: left top;
-                width: 100vh;
-                height: 100vw;
-                overflow-x: hidden;
-                position: absolute;
-                top: 100%;
-                left: 0;
-            }
-        }
-
         .container {
             width: 100%;
             height: 100%;
@@ -56,6 +42,9 @@
             display: flex;
             flex-direction: column;
             padding: 20px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
         .header {
@@ -81,6 +70,7 @@
         .time {
             font-size: 1.2vw;
             align-self: flex-end;
+            color: #004d40;
         }
 
         .main-content {
@@ -97,7 +87,8 @@
         }
 
         .grid-item, .side-item {
-            background-color: rgba(0, 0, 255, 0.8);
+            background-color: #4fc3f7;  /* Light sky blue */
+            color: white;
             border-radius: 10px;
             display: flex;
             flex-direction: column;
@@ -110,11 +101,13 @@
 
         .grid-item:hover, .side-item:hover {
             transform: scale(1.05);
+            background-color: #03a9f4;  /* Slightly darker sky blue */
         }
 
         .grid-item i, .side-item i {
             font-size: 2.5vw;
             margin-bottom: 10px;
+            color: white;
         }
 
         .grid-item div, .side-item div {
@@ -258,23 +251,8 @@
             }, 60000);
         }
 
-        function lockOrientation() {
-            if (screen.orientation && screen.orientation.lock) {
-                screen.orientation.lock('landscape').catch(function(error) {
-                    console.log('Orientation lock failed:', error);
-                });
-            } else if (window.screen.lockOrientation) {
-                window.screen.lockOrientation ('landscape');
-            } else if (window.screen.mozLockOrientation) {
-                window.screen.mozLockOrientation('landscape');
-            }
-        }
-
         // Call updateTime when the page loads
-        window.addEventListener('load', () => {
-            updateTime();
-            lockOrientation();
-        });
+        window.addEventListener('load', updateTime);
     </script>
 </body>
 </html>
