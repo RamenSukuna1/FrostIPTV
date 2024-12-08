@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FrostIPTV</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1e3c72;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            min-width: 100vw;
+            position: fixed;
+            left: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+        }
+
+        /* Orientation Lock Styles */
+        @media screen and (max-aspect-ratio: 16/9) {
+            body {
+                transform: rotate(-90deg);
+                transform-origin: left top;
+                width: 100vh;
+                height: 100vw;
+                overflow-x: hidden;
+                position: absolute;
+                top: 100%;
+                left: 0;
+            }
+        }
+
+        .container {
+            width: 100%;
+            height: 100%;
+            max-width: 1920px;
+            max-height: 1080px;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        .header {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .logo {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .logo img {
+            max-height: 80px;
+            max-width: 300px;
+        }
+
+        .time {
+            font-size: 1.2vw;
+            align-self: flex-end;
+        }
+
+        .main-content {
+            display: flex;
+            flex-grow: 1;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            gap: 15px;
+            flex-grow: 1;
+        }
+
+        .grid-item, .side-item {
+            background-color: rgba(0, 0, 255, 0.8);
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 10px;
+            transition: transform 0.3s ease;
+        }
+
+        .grid-item:hover, .side-item:hover {
+            transform: scale(1.05);
+        }
+
+        .grid-item i, .side-item i {
+            font-size: 2.5vw;
+            margin-bottom: 10px;
+        }
+
+        .grid-item div, .side-item div {
+            font-size: 1.5vw;
+            font-weight: bold;
+        }
+
+        .live {
+            grid-column: span 2;
+            grid-row: span 2;
+        }
+
+        .side {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 15px;
+            margin-left: 20px;
+            width: 150px;
+        }
+
+        .side-item {
+            width: 100%;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+            }
+
+            .grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .side {
+                flex-direction: row;
+                width: 100%;
+                margin-left: 0;
+                margin-top: 20px;
+                justify-content: center;
+            }
+
+            .side-item {
+                width: auto;
+                margin: 0 10px;
+            }
+
+            .grid-item div, .side-item div {
+                font-size: 2vw;
+            }
+
+            .grid-item i, .side-item i {
+                font-size: 3vw;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .grid-item div, .side-item div {
+                font-size: 2.5vw;
+            }
+
+            .grid-item i, .side-item i {
+                font-size: 3.5vw;
+            }
+        }
+
+        /* Prevent text selection and zooming */
+        body {
+            user-select: none;
+            touch-action: manipulation;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <img alt="FrostIPTV Logo" src="https://iili.io/2Gp2Fus.th.jpg"/>
+            </div>
+            <div class="time">03:35 PM</div>
+        </div>
+        <div class="main-content">
+            <div class="grid">
+                <div class="grid-item live">
+                    <i class="fas fa-tv"></i>
+                    <div>Live</div>
+                </div>
+                <div class="grid-item movies">
+                    <i class="fas fa-play-circle"></i>
+                    <div>Movies</div>
+                </div>
+                <div class="grid-item series">
+                    <i class="fas fa-film"></i>
+                    <div>Series</div>
+                </div>
+                <div class="grid-item user-account">
+                    <i class="fas fa-user"></i>
+                    <div>User Account</div>
+                </div>
+                <div class="grid-item change-playlist">
+                    <i class="fas fa-exchange-alt"></i>
+                    <div>Change Playlist</div>
+                </div>
+            </div>
+            <div class="side">
+                <div class="side-item">
+                    <i class="fas fa-cog"></i>
+                    <div>Settings</div>
+                </div>
+                <div class="side-item">
+                    <i class="fas fa-sync-alt"></i>
+                    <div>Reload</div>
+                </div>
+                <div class="side-item">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <div>EXIT</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function updateTime() {
+            const timeElement = document.querySelector('.time');
+            function formatTime() {
+                const now = new Date();
+                return now.toLocaleTimeString([], {
+                    hour: '2-digit', 
+                    minute: '2-digit', 
+                    hour12: true
+                }).toUpperCase();
+            }
+            
+            // Initial time update
+            timeElement.textContent = formatTime();
+            
+            // Update time every minute
+            setInterval(() => {
+                timeElement.textContent = formatTime();
+            }, 60000);
+        }
+
+        function lockOrientation() {
+            if (screen.orientation && screen.orientation.lock) {
+                screen.orientation.lock('landscape').catch(function(error) {
+                    console.log('Orientation lock failed:', error);
+                });
+            } else if (window.screen.lockOrientation) {
+                window.screen.lockOrientation ('landscape');
+            } else if (window.screen.mozLockOrientation) {
+                window.screen.mozLockOrientation('landscape');
+            }
+        }
+
+        // Call updateTime when the page loads
+        window.addEventListener('load', () => {
+            updateTime();
+            lockOrientation();
+        });
+    </script>
+</body>
+</html>
