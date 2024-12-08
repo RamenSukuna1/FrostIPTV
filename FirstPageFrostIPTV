@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FrostIPTV</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom, #e0f7fa, #80deea);
+            color: #004d40;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .container {
+            border: 1px solid #004d40;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: absolute;
+            top: 50%;
+            left: 5%;
+            transform: translateY(-50%);
+            width: 45%;
+            max-width: 400px;
+            text-align: left;
+        }
+
+        .container h1 {
+            margin: 0;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .container p {
+            margin: 10px 0;
+            font-size: 18px;
+        }
+
+        .container .highlight {
+            color: #00796b;
+            font-size: 20px;
+        }
+
+        .buttons {
+            margin-top: 20px;
+        }
+
+        .buttons button {
+            background-color: #004d40;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 0 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .buttons button:hover {
+            background-color: #003d33;
+        }
+
+        .qr-section {
+            margin-top: 20px;
+        }
+
+        .qr-section img {
+            width: 150px;
+            height: 150px;
+        }
+
+        .qr-section p {
+            margin-top: 10px;
+            font-size: 16px;
+        }
+
+        /* Replace the logo image with the new one */
+        .logo {
+            position: absolute;
+            top: 20px;
+            right: 20px; /* Changed to right side */
+        }
+
+        .logo img {
+            width: 100px;
+            height: auto;
+            background: none; /* Ensure there is no background */
+        }
+
+        .upgrade-container {
+            display: block;
+        }
+
+        .upgrade-container .whatsapp-button {
+            background-color: #25D366;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .upgrade-container .whatsapp-button i {
+            margin-right: 10px;
+        }
+
+        .trial-ended {
+            display: none;
+            font-size: 20px;
+            color: red;
+        }
+
+        /* Overlay for unclosable activation screen */
+        #overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 9998;
+            display: none;
+            pointer-events: none;
+        }
+
+        #overlay .container, #overlay .qr-section, #overlay .logo, #overlay .upgrade-container {
+            pointer-events: all; /* Allow interactions with upgrade container */
+        }
+
+        /* Make the upgrade container unclosable */
+        #overlay .upgrade-container {
+            z-index: 9999;
+        }
+
+        /* Left aligned box for MAC address and Device Key */
+        .mac-device-container {
+            position: relative;
+            text-align: left; /* Ensure text aligns left */
+        }
+
+        /* Right aligned box for QR Code */
+        .qr-section-container {
+            position: absolute;
+            top: 60%; /* Adjusted position to make it lower */
+            right: 5%;
+            transform: translateY(-50%);
+            width: 45%; /* Adjust width to fit */
+            text-align: right; /* Ensure text aligns right */
+            margin-top: 20px; /* Adds some spacing from the logo */
+        }
+    </style>
+</head>
+<body>
+    <!-- Trial page content -->
+    <div class="container" id="trial-container" style="display: block;">
+        <h1 id="trial-status">Trial ends in: 168h:00m:00s</h1>
+        <p>To add/manage the playlists, use following values on website:</p>
+        <p><a href="https://iboproapp.com/">https://iboproapp.com/</a></p>
+
+        <!-- MAC Address and Device Key inside the countdown box -->
+        <div class="mac-device-container">
+            <p>Mac Address:</p>
+            <p class="highlight" id="mac-address">Fetching...</p>
+            <p>Device Key:</p>
+            <p class="highlight" id="device-key">Generating...</p>
+        </div>
+
+        <!-- Buttons inside the countdown box -->
+        <div class="buttons">
+            <button id="reload-button" onclick="reloadApp()">RELOAD</button>
+            <button onclick="exitApp()">EXIT</button>
+        </div>
+    </div>
+
+    <!-- QR Code section (right) -->
+    <div class="qr-section-container">
+        <img alt="QR code" height="150" src="https://storage.googleapis.com/a1aa/image/v9T97pOojF6wMBATeL0QJ2sZS7Bv2iehQ5eWMfF70o3vtSjPB.jpg" width="150"/>
+        <p>Scan QR to add playlist.</p>
+    </div>
+
+    <!-- Logo section (Updated logo) -->
+    <div class="logo">
+        <img alt="ibo player pro logo" src="https://iili.io/2Gp2Fus.th.jpg" />
+    </div>
+
+    <!-- Trial ended message -->
+    <div class="trial-ended" id="trial-ended">
+        <h1>Trial ended. Please activate.</h1>
+        <p>Your trial period has expired. Please contact us for activation.</p>
+    </div>
+
+    <!-- Upgrade page content -->
+    <div class="upgrade-container" id="upgrade-container" style="display: none;">
+        <h1>Please upgrade to continue using this app</h1>
+        <p>Contact us on WhatsApp to activate your account.</p>
+        <button class="whatsapp-button" onclick="contactWhatsApp()">
+            <i class="fab fa-whatsapp"></i> Contact on WhatsApp
+        </button>
+        <p>Activation is 7.99€ and it's unlimited time.</p>
+    </div>
+
+    <!-- Overlay for unclosable activation screen -->
+    <div id="overlay"></div>
+
+    <script>
+        let countdownTime = 168 * 60 * 60; // Set countdown time to 168 hours (in seconds)
+        let isTrialEnded = false;
+
+        // Function to generate a unique MAC address (random but consistent for the user)
+        function generateUniqueMacAddress() {
+            const storedMac = localStorage.getItem("macAddress");
+            if (storedMac) {
+                return storedMac; // If a MAC address is already stored, return it
+            }
+
+            // If no MAC address is stored, generate one
+            const hexDigits = "0123456789ABCDEF";
+            let mac = "00:";
+            for (let i = 0; i < 5; i++) {
+                mac += hexDigits[Math.floor(Math.random() * 16)] + hexDigits[Math.floor(Math.random() * 16)];
+                if (i < 4) mac += ":";
+            }
+
+            // Save the generated MAC address in localStorage so it persists across sessions
+            localStorage.setItem("macAddress", mac);
+
+            return mac;
+        }
+
+        // Function to generate a 6-digit device key
+        function generateDeviceKey(macAddress) {
+            const key = Math.floor(100000 + Math.random() * 900000); // Generates a random 6-digit number
+            return key.toString();
+        }
+
+        // Function to save the remaining countdown time in localStorage
+        function saveRemainingTime() {
+            const remainingTime = countdownTime;
+            localStorage.setItem('countdownTime', remainingTime);
+        }
+
+        // Load the remaining time from localStorage (if available)
+        function loadRemainingTime() {
+            const storedTime = localStorage.getItem('countdownTime');
+            if (storedTime) {
+                countdownTime = parseInt(storedTime, 10);
+            }
+        }
+
+        // Reload button should not reset the countdown, just reload the page
+        function reloadApp() {
+            if (!isTrialEnded) {
+                saveRemainingTime();
+                location.reload();
+            }
+        }
+
+        function exitApp() {
+            window.location.href = 'main-screen.html'; // Redirects to the second page
+        }
+
+        function contactWhatsApp() {
+            window.location.href = 'http://wa.me/+355683704453';
+        }
+
+        function startCountdown() {
+            const countdownInterval = setInterval(() => {
+                if (countdownTime <= 0) {
+                    clearInterval(countdownInterval);
+                    document.getElementById('trial-status').innerText = "Trial ended.";
+                    isTrialEnded = true;
+
+                    setTimeout(() => {
+                        document.getElementById('trial-ended').style.display = 'block';
+                        document.getElementById('overlay').style.display = 'block';
+                        setTimeout(() => {
+                            document.getElementById('trial-ended').style.display = 'none';
+                            document.getElementById('upgrade-container').style.display = 'block';
+                        }, 2000); // Wait for 2 seconds before showing the upgrade GUI
+                    }, 1000);
+                } else {
+                    let hours = Math.floor(countdownTime / 3600);
+                    let minutes = Math.floor((countdownTime % 3600) / 60);
+                    let seconds = countdownTime % 60;
+                    document.getElementById('trial-status').innerText = `Trial ends in: ${hours}h:${minutes}m:${seconds}s`;
+                    countdownTime--;
+                    saveRemainingTime();
+                }
+            }, 1000);
+        }
+
+        async function initializeApp() {
+            try {
+                let macAddress = generateUniqueMacAddress();
+
+                // Check if there's a device key already saved in localStorage
+                let deviceKey = localStorage.getItem(macAddress);
+                if (!deviceKey) {
+                    deviceKey = generateDeviceKey(macAddress);
+                    localStorage.setItem(macAddress, deviceKey);
+                }
+
+                document.getElementById('mac-address').innerText = macAddress;
+                document.getElementById('device-key').innerText = deviceKey;
+
+                loadRemainingTime();
+                startCountdown();
+            } catch (error) {
+                document.getElementById('mac-address').innerText = 'Permission denied';
+                document.getElementById('device-key').innerText = 'N/A';
+            }
+        }
+
+        initializeApp();
+    </script>
+</body>
+</html>
